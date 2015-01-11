@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"os"
 	"strings"
 	"testing"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/chop-dbhi/origins-dispatch/graph"
 )
 
-const neo4jTestUri = "http://localhost:7500/db/data/"
+const defaultNeo4jUri = "http://localhost:7500/db/data/"
 
 const resourceMergeData = `{
 	"resource": {"origins:id": "test", "prov:label": "Test"},
@@ -26,8 +27,14 @@ const resourceMergeData = `{
 var c *graph.Client
 
 func init() {
+	uri := os.Getenv("ORIGINS_DISPATCH_NEO4J_URI")
+
+	if uri == "" {
+		uri = defaultNeo4jUri
+	}
+
 	c = &graph.Client{
-		Uri: neo4jTestUri,
+		Uri: uri,
 	}
 }
 
