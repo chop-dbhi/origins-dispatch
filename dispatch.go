@@ -8,10 +8,11 @@ type EventPayload struct {
 	Data  *json.RawMessage
 }
 
-func dispatch(e *EventPayload) {
+func dispatch(e *EventPayload) error {
 	switch e.Event {
 	case "resource-merge":
-		handleResourceMerge(e)
-		break
+		return handleResourceMerge(e)
 	}
+
+	return nil
 }

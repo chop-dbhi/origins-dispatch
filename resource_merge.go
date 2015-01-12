@@ -165,7 +165,5 @@ func handleResourceMerge(e *EventPayload) error {
 	subject, err := renderTemplate(resourceMergeSubject, p)
 	msg, err := renderTemplate(resourceMergeMessage, stats)
 
-	sendEmail(to, string(subject), msg)
-
-	return nil
+	return sendEmail(to, string(subject), msg)
 }

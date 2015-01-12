@@ -19,8 +19,15 @@ var client = http.Client{
 	Transport: &transport,
 }
 
+// TODO: Implement
+func getWebhooks() []string {
+	return []string{}
+}
+
 // Triggers the handlers associated with the hook
-func trigger(urls []string, payload interface{}) (int, error) {
+func trigger(payload interface{}) (int, error) {
+	urls := getWebhooks()
+
 	n := len(urls)
 
 	if n == 0 {

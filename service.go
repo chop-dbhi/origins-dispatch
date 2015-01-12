@@ -54,12 +54,19 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("* Received '%s' event\n", e.Event)
 	}
 
-	dispatch(&e)
+	// TODO: run this and trigger in go routines once trigger is implemented.
+	// Add wait group to confirm the processing finished.
+	err = dispatch(&e)
 
 	// Trigger webhooks
-	// trigger([]string{}, &e)
+	// err = trigger(&e)
 
-	w.WriteHeader(http.StatusNoContent)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+	} else {
+		w.WriteHeader(http.StatusNoContent)
+	}
 }
 
 func serve() {
