@@ -35,7 +35,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var e EventPayload
+	e := EventPayload{}
 
 	if err := json.Unmarshal(b, &e); err != nil {
 		log.Println(err)

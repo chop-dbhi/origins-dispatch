@@ -133,10 +133,10 @@ func renderTemplate(t *template.Template, d interface{}) ([]byte, error) {
 
 // Handles the resource merge event
 func handleResourceMerge(e *EventPayload) error {
-	var p *ResourceMergePayload
+	p := ResourceMergePayload{}
 
 	// Unmarshal the remaining bytes
-	if err := json.Unmarshal(*e.Data, p); err != nil {
+	if err := json.Unmarshal(*e.Data, &p); err != nil {
 		return err
 	}
 
