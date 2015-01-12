@@ -12,8 +12,34 @@ const (
 	StatusUnprocessableEntity = 422
 )
 
+var getPayload = map[string]string{
+	"name":    "Origins Dispatch Service",
+	"version": version,
+}
+
 // Single endpoint for receiving the payload request
 func handler(w http.ResponseWriter, r *http.Request) {
+
+	// Respond to GET requests with name and version.
+	if r.Method == "GET" {
+		h := w.Header()
+
+		h.Set("Content-Type", "application/json; charset=\"utf-8\"")
+
+		w.WriteHeader(http.StatusOK)
+
+		b, _ := json.Marshal(getPayload)
+		w.Write(b)
+
+		return
+	}
+
+	// Response to non-POST methods
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
 	ct := r.Header.Get("Content-Type")
 
 	if ct != "application/json" {
