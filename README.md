@@ -9,11 +9,11 @@ A service receives payloads from the Origins service (currently via a POST reque
 Default. Runs the service on port 5002.
 
 ```
-docker run -d --name origins-dispatch -P chop-dbhi/origins-dispatch
+docker run -d --name origins-dispatch -P dbhi/origins-dispatch
 ```
 
 Print help and usage.
 
 ```
-docker run chop-dbhi/origins-dispatch help
+docker run dbhi/origins-dispatch help
 ```
