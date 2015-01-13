@@ -47,6 +47,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	b, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
 
 	if err != nil {
 		log.Println(err)
