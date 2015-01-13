@@ -154,16 +154,23 @@ func handleResourceMerge(e *EventPayload) error {
 		return nil
 	}
 
-	to := make([]string, len(users))
-
-	for i, u := range users {
-		to[i] = u.Email
-	}
-
 	stats := p.OpStats()
 
-	subject, err := renderTemplate(resourceMergeSubject, p)
+	// TODO add error handling
+	// Returned as bytes
+	s, err := renderTemplate(resourceMergeSubject, p)
+	subject := string(s)
+
 	msg, err := renderTemplate(resourceMergeMessage, stats)
 
-	return sendEmail(to, string(subject), msg)
+	// Separate emails to each user
+	to := make([]string, 1)
+
+	// TODO add error handling in case email server is down
+	for _, u := range users {
+		to[0] = u.Email
+		err = sendEmail(to, string(subject), msg)
+	}
+
+	return err
 }
