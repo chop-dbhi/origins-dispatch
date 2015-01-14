@@ -45,6 +45,7 @@ func trigger(payload interface{}) (int, error) {
 
 	wg := sync.WaitGroup{}
 	defer wg.Wait()
+
 	wg.Add(n)
 
 	for _, url := range urls {
@@ -65,6 +66,7 @@ func post(url string, data io.Reader, timeout time.Duration) {
 		transport.CancelRequest(req)
 		log.Println(url, "timed out")
 	})
+
 	defer timer.Stop()
 
 	client.Do(req)

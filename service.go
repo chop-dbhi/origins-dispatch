@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/spf13/viper"
 )
 
 const (
@@ -19,6 +21,7 @@ var getPayload = map[string]string{
 
 // Single endpoint for receiving the payload request
 func handler(w http.ResponseWriter, r *http.Request) {
+	debug := viper.GetBool("debug")
 
 	// Respond to GET requests with name and version.
 	if r.Method == "GET" {
@@ -97,7 +100,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func serve() {
-	addr := fmt.Sprintf("%s:%d", serveHost, servePort)
+	debug := viper.GetBool("debug")
+	host := viper.GetString("serve_host")
+	port := viper.GetInt("serve_port")
+
+	addr := fmt.Sprintf("%s:%d", host, port)
 
 	// Register handler with server
 	http.HandleFunc("/", handler)

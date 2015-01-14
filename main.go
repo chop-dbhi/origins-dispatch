@@ -4,19 +4,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 const version = "0.1.0"
-
-var (
-	// Global
-	debug bool
-
-	// Service
-	serveHost  string
-	servePort  int
-	serveNeo4j string
-)
 
 // The main command describes the service and defaults to printing the
 // help message.
@@ -49,20 +40,28 @@ var serveCmd = &cobra.Command{
 	},
 }
 
-func main() {
-	// Main flags
-	mainFlags := serveCmd.PersistentFlags()
-	mainFlags.BoolVar(&debug, "debug", false, "Turn on debugging.")
-
-	// Serve command flags
-	serveFlags := serveCmd.Flags()
-	serveFlags.StringVar(&serveHost, "host", "localhost", "Host address to bind to.")
-	serveFlags.IntVar(&servePort, "port", 5002, "Host port to bind to.")
-	serveFlags.StringVar(&serveNeo4j, "neo4j", "http://localhost:7474/db/data/", "URI of the Neo4j server.")
-
-	// Register subcommands
+func init() {
 	mainCmd.AddCommand(versionCmd)
 	mainCmd.AddCommand(serveCmd)
 
+	viper.SetEnvPrefix("ORIGINS_DISPATCH")
+	viper.AutomaticEnv()
+
+	flags := mainCmd.PersistentFlags()
+	flags.Bool("debug", false, "Turn on debugging.")
+
+	viper.BindPFlag("debug", flags.Lookup("debug"))
+
+	flags = serveCmd.Flags()
+	flags.String("host", "localhost", "Host address to bind to.")
+	flags.Int("port", 5002, "Host port to bind to.")
+	flags.String("neo4j", "http://localhost:7474/db/data/", "URI of the Neo4j server.")
+
+	viper.BindPFlag("serve_host", flags.Lookup("host"))
+	viper.BindPFlag("serve_port", flags.Lookup("port"))
+	viper.BindPFlag("serve_neo4j", flags.Lookup("neo4j"))
+}
+
+func main() {
 	mainCmd.Execute()
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/chop-dbhi/origins-dispatch/graph"
 	"github.com/jmcvetta/neoism"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -141,7 +142,7 @@ func handleResourceMerge(e *EventPayload) error {
 	}
 
 	c := &graph.Client{
-		Uri: serveNeo4j,
+		Uri: viper.GetString("serve_neo4j"),
 	}
 
 	users, err := p.Resource.Subscribers(c)
