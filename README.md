@@ -17,3 +17,14 @@ Print help and usage.
 ```
 docker run dbhi/origins-dispatch help
 ```
+
+## Configuration
+
+The `help` command will print the usage and list of subcommands. The server can be configured using command line flags or throught environment variables.
+
+### Environment variables
+
+- `ORIGINS_DISPATCH_DEBUG` - Set this value to `1` to turn on debugging.
+- `ORIGINS_DISPATCH_SERVE_HOST` - The hostname the server will listen to.
+- `ORIGINS_DISPATCH_SERVE_PORT` - The port the server will listen on.
+- `ORIGINS_DISPATCH_SERVE_NEO4J` - The URL of the Neo4j endpoint the service will interact with.
