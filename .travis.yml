@@ -9,7 +9,7 @@ go:
     - tip
 
 env:
-    - ORIGINS_DISPATCH_NEO4J_URI="http://localhost:7474/db/data/"
+    - ORIGINS_DISPATCH_NEO4J="http://localhost:7474/db/data/"
 
 before_install:
     - sh test/start-neo4j.sh

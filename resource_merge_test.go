@@ -27,7 +27,7 @@ const resourceMergeData = `{
 var c *graph.Client
 
 func init() {
-	uri := os.Getenv("ORIGINS_DISPATCH_NEO4J_URI")
+	uri := os.Getenv("ORIGINS_DISPATCH_NEO4J")
 
 	if uri == "" {
 		uri = defaultNeo4jUri
