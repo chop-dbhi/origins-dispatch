@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"testing"
 
 	"github.com/bmizerany/assert"
@@ -14,4 +15,11 @@ func TestConfig(t *testing.T) {
 		"debug":       false,
 		"serve_neo4j": "http://localhost:7474/db/data/",
 	})
+
+	os.Setenv("ORIGINS_DISPATCH_SERVE_PORT", "5003")
+	os.Setenv("ORIGINS_DISPATCH_DEBUG", "1")
+
+	assert.Equal(t, viper.GetInt("serve_port"), 5003)
+	assert.Equal(t, viper.GetBool("debug"), true)
+
 }
