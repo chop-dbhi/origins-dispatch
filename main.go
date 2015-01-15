@@ -18,6 +18,9 @@ var mainCmd = &cobra.Command{
 them to subscribers.
 
 Learn more about Origins: https://github.com/chop-dbhi/origins/`,
+	Run: func(cmd *cobra.Command, args []string) {
+		serve()
+	},
 }
 
 // The version command prints this service.
@@ -30,36 +33,29 @@ var versionCmd = &cobra.Command{
 	},
 }
 
-// The serve command runs the service.
-var serveCmd = &cobra.Command{
-	Use:   "serve",
-	Short: "Runs the service.",
-	Long:  "The serve command runs the service.",
-	Run: func(cmd *cobra.Command, args []string) {
-		serve()
-	},
-}
-
 func init() {
 	mainCmd.AddCommand(versionCmd)
-	mainCmd.AddCommand(serveCmd)
 
 	viper.SetEnvPrefix("ORIGINS_DISPATCH")
 	viper.AutomaticEnv()
 
-	flags := mainCmd.PersistentFlags()
+	flags := mainCmd.Flags()
+
 	flags.Bool("debug", false, "Turn on debugging.")
+	flags.String("addr", "localhost:5002", "Address of the service")
+	flags.String("neo4j", "http://localhost:7474/db/data/", "URI of the Neo4j HTTP server")
+	flags.String("smtp-addr", "localhost:25", "Address of the SMTP server")
+	flags.String("smtp-user", "", "User to authenticate with the SMTP server")
+	flags.String("smtp-password", "", "Password to authenticate with the SMTP server")
+	flags.String("email-from", "noreply@example.com", "The from email address.")
 
 	viper.BindPFlag("debug", flags.Lookup("debug"))
-
-	flags = serveCmd.Flags()
-	flags.String("host", "localhost", "Host address to bind to.")
-	flags.Int("port", 5002, "Host port to bind to.")
-	flags.String("neo4j", "http://localhost:7474/db/data/", "URI of the Neo4j server.")
-
-	viper.BindPFlag("serve_host", flags.Lookup("host"))
-	viper.BindPFlag("serve_port", flags.Lookup("port"))
-	viper.BindPFlag("serve_neo4j", flags.Lookup("neo4j"))
+	viper.BindPFlag("addr", flags.Lookup("addr"))
+	viper.BindPFlag("neo4j", flags.Lookup("neo4j"))
+	viper.BindPFlag("smtp_addr", flags.Lookup("smtp-addr"))
+	viper.BindPFlag("smtp_user", flags.Lookup("smtp-user"))
+	viper.BindPFlag("smtp_password", flags.Lookup("smtp-password"))
+	viper.BindPFlag("email_from", flags.Lookup("email-from"))
 }
 
 func main() {

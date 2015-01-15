@@ -101,10 +101,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func serve() {
 	debug := viper.GetBool("debug")
-	host := viper.GetString("serve_host")
-	port := viper.GetInt("serve_port")
-
-	addr := fmt.Sprintf("%s:%d", host, port)
+	addr := viper.GetString("addr")
 
 	// Register handler with server
 	http.HandleFunc("/", handler)

@@ -142,7 +142,7 @@ func handleResourceMerge(e *EventPayload) error {
 	}
 
 	c := &graph.Client{
-		Uri: viper.GetString("serve_neo4j"),
+		Uri: viper.GetString("neo4j"),
 	}
 
 	users, err := p.Resource.Subscribers(c)

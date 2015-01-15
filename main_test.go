@@ -10,16 +10,20 @@ import (
 
 func TestConfig(t *testing.T) {
 	assert.Equal(t, viper.AllSettings(), map[string]interface{}{
-		"serve_host":  "localhost",
-		"serve_port":  5002,
-		"debug":       false,
-		"serve_neo4j": "http://localhost:7474/db/data/",
+		"debug":         false,
+		"addr":          "localhost:5002",
+		"neo4j":         "http://localhost:7474/db/data/",
+		"email_from":    "noreply@example.com",
+		"smtp_addr":     "localhost:25",
+		"smtp_user":     "",
+		"smtp_password": "",
 	})
+}
 
-	os.Setenv("ORIGINS_DISPATCH_SERVE_PORT", "5003")
+func TestEnvConfig(t *testing.T) {
+	os.Setenv("ORIGINS_DISPATCH_ADDR", "localhost:5003")
 	os.Setenv("ORIGINS_DISPATCH_DEBUG", "1")
 
-	assert.Equal(t, viper.GetInt("serve_port"), 5003)
+	assert.Equal(t, viper.GetString("addr"), "localhost:5003")
 	assert.Equal(t, viper.GetBool("debug"), true)
-
 }

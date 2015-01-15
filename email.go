@@ -1,34 +1,40 @@
 package main
 
 import (
-	"fmt"
+	"net"
 	"net/smtp"
 
 	"github.com/jordan-wright/email"
+	"github.com/spf13/viper"
 )
-
-const EMAIL_HOST = "localhost"
-const EMAIL_PORT = 1025
-const EMAIL_AUTH_USERNAME = ""
-const EMAIL_AUTH_PASSWORD = ""
-const EMAIL_FROM = "notifications@origins.link"
 
 // Sends an email
 func sendEmail(to []string, subject string, msg []byte) error {
 	var auth smtp.Auth
 
+	from := viper.GetString("from")
+
 	e := &email.Email{
 		To:      to,
-		From:    EMAIL_FROM,
+		From:    from,
 		Subject: subject,
 		Text:    msg,
 	}
 
-	if EMAIL_AUTH_USERNAME != "" {
-		auth = smtp.PlainAuth("", EMAIL_AUTH_USERNAME, EMAIL_AUTH_PASSWORD, EMAIL_HOST)
-	}
+	addr := viper.GetString("smtp_addr")
+	user := viper.GetString("smtp_user")
 
-	addr := fmt.Sprintf("%s:%d", EMAIL_HOST, EMAIL_PORT)
+	if user != "" {
+		password := viper.GetString("smtp_password")
+
+		host, _, err := net.SplitHostPort(addr)
+
+		if err != nil {
+			return err
+		}
+
+		auth = smtp.PlainAuth("", user, password, host)
+	}
 
 	return e.Send(addr, auth)
 }
